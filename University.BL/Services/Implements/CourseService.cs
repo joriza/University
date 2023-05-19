@@ -8,7 +8,7 @@ using University.BL.Repositories;
 
 namespace University.BL.Services.Implements
 {
-    public class CourseService : GenericService<Course>
+    public class CourseService : GenericService<Course>, ICourseService
     {
         public CourseService(ICourseRepository courseRepository) : base(courseRepository)
         {

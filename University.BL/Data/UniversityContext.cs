@@ -10,6 +10,7 @@ namespace University.BL.Data
 {
     public class UniversityContext : DbContext
     {
+        private static UniversityContext universityContext = null;
         public UniversityContext() : base("UniversityContext")
         {
             // Server=HCI-NOTE227\SQLEXPRESS;Database=University;Integrated Security=True
@@ -21,6 +22,10 @@ namespace University.BL.Data
 
         public static UniversityContext Create()
         {
+            //if (universityContext == null)
+            //    universityContext = new UniversityContext();
+
+            //return universityContext;
             return new UniversityContext();
         }
     }
