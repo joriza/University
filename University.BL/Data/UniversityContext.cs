@@ -22,11 +22,11 @@ namespace University.BL.Data
 
         public static UniversityContext Create()
         {
-            //if (universityContext == null)
-            //    universityContext = new UniversityContext();
+            if (universityContext == null)
+                universityContext = new UniversityContext();
 
-            //return universityContext;
-            return new UniversityContext();
+            return universityContext;
+            //return new UniversityContext();
         }
     }
 }

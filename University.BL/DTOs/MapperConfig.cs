@@ -23,6 +23,7 @@ namespace University.BL.DTOs
 
                 cfg.CreateMap<Enrollment, EnrollmentDTO>(); // De un modelo a un DTO - GET
                 cfg.CreateMap<EnrollmentDTO, Enrollment>(); // De un DTO a un modelo - PUT
+
             });
         }
     }
