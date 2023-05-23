@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace University.BL.Models
 {
-    [Table("Course", Schema = "dbo")]
+    [Table("Course", Schema = "dbo")] // Aveces puede no ser necesario
     public class Course
     {
         [Key]

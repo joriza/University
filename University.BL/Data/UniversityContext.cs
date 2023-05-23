@@ -20,6 +20,10 @@ namespace University.BL.Data
         public DbSet<Student> Student { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
 
+        /// <summary>
+        /// Comentario del método
+        /// </summary>
+        /// <returns></returns>
         public static UniversityContext Create()
         {
             if (universityContext == null)
