@@ -53,7 +53,7 @@ namespace University.API.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Post(CourseDTO courseDTO) // Si el método comienza con el verbo http no es necesario colocar el decorador. No resuelve por el nombre del metodo sino por el tipo de método. Tampoco importa el nombre el método, no entiendo como matchea.
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) // Valida modelo de datos.
                 return BadRequest(ModelState);
 
             try
@@ -66,8 +66,33 @@ namespace University.API.Controllers
             {
                 return InternalServerError(ex);
             }
-
         }
+
+        [HttpPut]
+        public async Task<IHttpActionResult> Put(CourseDTO courseDTO, int id) // Recibe un objeto en el cuerpo de la peticion + un parámetro por la url.
+        {
+            if (!ModelState.IsValid) // Verifica modelo de datos
+                return BadRequest(ModelState);
+
+            if(courseDTO.CourseID != id) // Verifica que la peticion tenga un parámetro numerico.
+                return BadRequest();
+
+            var courseFlag = await courseService.GetById(id); // Consulta que el registro solicitado exista.
+            if(courseFlag == null)
+                return NotFound();
+
+            try
+            {
+                var course = mapper.Map<Course>(courseDTO);
+                course = await courseService.Update(course);
+                return Ok(course);
+            }
+            catch (Exception ex)
+            {
+
+                return InternalServerError(ex);
+            }
+        }
+
     }
 }
-//8.5
