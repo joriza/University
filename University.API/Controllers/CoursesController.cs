@@ -94,5 +94,28 @@ namespace University.API.Controllers
             }
         }
 
+        [HttpDelete]
+        public async Task<IHttpActionResult> Delete(int id)
+        {
+            var courseFlag = await courseService.GetById(id); // Consulta que el registro solicitado exista.
+            if (courseFlag == null)
+                return NotFound();
+
+            try
+            {
+                if (!await courseService.DeleteCheckRelatedEntity(id)) // Verifica si el id está en tablas relacionadas, si no hay, procede a eliminar el registro.
+                    await courseService.Delete(id);
+                else
+                    throw new Exception("El id exist en tablas relacionadas, primero debe eliminarlo de ellas.");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return InternalServerError(ex);
+            }
+
+        }
+
     }
 }

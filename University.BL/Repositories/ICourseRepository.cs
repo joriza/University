@@ -9,5 +9,6 @@ namespace University.BL.Repositories
 {
     public interface ICourseRepository : IGenericRepository<Course>
     {
+        Task<bool> DeleteCheckRelatedEntity(int id);
     }
 }

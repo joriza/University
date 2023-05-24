@@ -9,5 +9,6 @@ namespace University.BL.Services
 {
     public interface ICourseService : IGenericService<Course>
     {
+        Task<bool> DeleteCheckRelatedEntity(int id);
     }
 }
