@@ -22,5 +22,18 @@ namespace University.BL.Services.Implements
         {
             return await courseRepository.DeleteCheckRelatedEntity(id);
         }
+
+        public Course GetByCredit(int credit)
+        {
+            var aux = courseRepository.GetByCredit(credit);
+            return aux;
+        }
+
+        public async Task<Course> GetByCreditAsync(int credit)
+        {
+            var aux = await courseRepository.GetByCreditAsync(credit);
+            return aux;
+        }
+
     }
 }

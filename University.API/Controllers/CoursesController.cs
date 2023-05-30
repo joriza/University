@@ -50,7 +50,34 @@ namespace University.API.Controllers
             return Ok(courseDTO);
         }
 
-        [HttpPost]
+        [HttpGet]
+        public IHttpActionResult GetByCredit(int id)
+        {
+            var course = courseService.GetByCredit(id);
+
+            if (course == null)
+                return NotFound();
+
+            var courseDTO = mapper.Map<CourseDTO>(course);
+
+            return Ok(courseDTO);
+        }
+
+
+        [HttpGet]
+        public async Task<IHttpActionResult> GetByCreditAsync(int id)
+        {
+            var course = await courseService.GetByCreditAsync(id);
+
+            if (course == null)
+                return NotFound();
+
+            var courseDTO = mapper.Map<CourseDTO>(course);
+
+            return Ok(courseDTO);
+        }
+
+        //[HttpPost]
         public async Task<IHttpActionResult> Post(CourseDTO courseDTO) // Si el método comienza con el verbo http no es necesario colocar el decorador. No resuelve por el nombre del metodo sino por el tipo de método. Tampoco importa el nombre el método, no entiendo como matchea.
         {
             if (!ModelState.IsValid) // Valida modelo de datos.
@@ -67,6 +94,28 @@ namespace University.API.Controllers
                 return InternalServerError(ex);
             }
         }
+
+
+        //[HttpPost]
+        //public async Task<IHttpActionResult> GetByCredits(CourseDTO courseDTO) // Si el método comienza con el verbo http no es necesario colocar el decorador. No resuelve por el nombre del metodo sino por el tipo de método. Tampoco importa el nombre el método, no entiendo como matchea.
+        //{
+        //    if (!ModelState.IsValid) // Valida modelo de datos.
+        //        return BadRequest(ModelState);
+
+        //    try
+        //    {
+        //        var course = mapper.Map<Course>(courseDTO); //Comno el servicio debe recibir un modelo, con Mapper se envía courseDTO para recibir el modelo Course
+        //        course = await courseService.Insert(course); //aunque la tabla curso no tiene id auto incremental, si lo fuera, por eso se guarda en una variable lo que devuelve el metodo Insert.
+        //        return Ok(course); // Retorna 200 ok + el objeto que se ha insertado.
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return InternalServerError(ex);
+        //    }
+        //}
+
+
+        //PostByCredits
 
         [HttpPut]
         public async Task<IHttpActionResult> Put(CourseDTO courseDTO, int id) // Recibe un objeto en el cuerpo de la peticion + un parámetro por la url.
@@ -106,7 +155,7 @@ namespace University.API.Controllers
                 if (!await courseService.DeleteCheckRelatedEntity(id)) // Verifica si el id está en tablas relacionadas, si no hay, procede a eliminar el registro.
                     await courseService.Delete(id);
                 else
-                    throw new Exception("El id exist en tablas relacionadas, primero debe eliminarlo de ellas.");
+                    throw new Exception("El id existe en tablas relacionadas, primero debe eliminarlo de ellas.");
                 return Ok();
             }
             catch (Exception ex)

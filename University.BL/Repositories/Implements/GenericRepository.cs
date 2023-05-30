@@ -34,7 +34,9 @@ namespace University.BL.Repositories.Implements
 
         public async Task<TEntity> GetById(int id)
         {
-            return await universityContext.Set<TEntity>().FindAsync(id);
+            var aux = await universityContext.Set<TEntity>().FindAsync(id); // Se usa findAsync porque el método es asincrónico. Si lo encuentra devuelve el objeto, sino devuelve null.
+                                                                            //var aux = universityContext.Course.Find(id); Para el caso de una clase no generica.
+            return aux;
         }
 
         public async Task<TEntity> Insert(TEntity entity)

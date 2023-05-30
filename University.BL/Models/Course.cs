@@ -18,3 +18,4 @@ namespace University.BL.Models
         public virtual ICollection<CourseInstructor> CourseInstructors { get; set; }
     }
 }
+    

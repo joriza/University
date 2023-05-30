@@ -25,7 +25,8 @@ namespace University.BL.Services.Implements
 
         public async Task<TEntity> GetById(int id)
         {
-            return await genericRepository.GetById(id);
+            var aux = await genericRepository.GetById(id);
+            return aux;
         }
 
         public async Task<TEntity> Insert(TEntity entity)

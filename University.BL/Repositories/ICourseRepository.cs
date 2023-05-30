@@ -10,5 +10,8 @@ namespace University.BL.Repositories
     public interface ICourseRepository : IGenericRepository<Course>
     {
         Task<bool> DeleteCheckRelatedEntity(int id);
+        Course GetByCredit(int credit);
+
+        Task<Course> GetByCreditAsync(int credit);
     }
 }

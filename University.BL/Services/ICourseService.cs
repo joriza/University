@@ -5,10 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using University.BL.Models;
 
+
 namespace University.BL.Services
 {
     public interface ICourseService : IGenericService<Course>
     {
         Task<bool> DeleteCheckRelatedEntity(int id);
+        Course GetByCredit(int id); //
+
+        Task<Course> GetByCreditAsync(int id); //
     }
+
 }
