@@ -11,7 +11,8 @@ namespace University.BL.Repositories
     {
         Task<bool> DeleteCheckRelatedEntity(int id);
         Course GetByCredit(int credit);
-
         Task<Course> GetByCreditAsync(int credit);
+        //Task<Course> PostByCreditAsync(int credit);
+
     }
 }

@@ -17,4 +17,11 @@ namespace University.BL.DTOs
         [Required(ErrorMessage = "El campo Creditos es obligatorio")]
         public int Credits { get; set; }
     }
+
+    public class CourseDTOid
+    {
+        [Required(ErrorMessage = "El campo CouseID es obligatorio")]
+        public int CourseID { get; set; }
+    }
+
 }

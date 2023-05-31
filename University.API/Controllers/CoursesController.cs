@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using University.API.Models;
 using University.BL.Data;
 using University.BL.DTOs;
 using University.BL.Models;
@@ -17,9 +18,9 @@ namespace University.API.Controllers
 {
     public class CoursesController : ApiController
     {
-        private IMapper mapper;
-        private static UniversityContext contex_     = UniversityContext.Create();
-        private static ICourseRepository repo_       = new CourseRepository(contex_);
+        private readonly IMapper mapper;
+        private static readonly UniversityContext contex_     = UniversityContext.Create();
+        private static readonly ICourseRepository repo_       = new CourseRepository(contex_);
         private readonly CourseService courseService = new CourseService(repo_);
         //private readonly CourseService courseService = new CourseService(new CourseRepository(UniversityContext.Create())); //Todo en una linea, arriba está por separado.
 
@@ -37,7 +38,7 @@ namespace University.API.Controllers
             return Ok(coursesDTO);
         }
 
-        [HttpGet]
+        [HttpGet] // Obtener curso buscando por campo ID
         public async Task<IHttpActionResult> GetById(int id)
         {
             var course = await courseService.GetById(id);
@@ -50,7 +51,7 @@ namespace University.API.Controllers
             return Ok(courseDTO);
         }
 
-        [HttpGet]
+        [HttpGet] // 1.4-Obtener curso buscando por campo credits (get-sincrónico)
         public IHttpActionResult GetByCredit(int id)
         {
             var course = courseService.GetByCredit(id);
@@ -63,8 +64,7 @@ namespace University.API.Controllers
             return Ok(courseDTO);
         }
 
-
-        [HttpGet]
+        [HttpGet] //2.4-Obtener curso buscando por campo credits (get-asincrónico)
         public async Task<IHttpActionResult> GetByCreditAsync(int id)
         {
             var course = await courseService.GetByCreditAsync(id);
@@ -77,7 +77,35 @@ namespace University.API.Controllers
             return Ok(courseDTO);
         }
 
-        //[HttpPost]
+        [HttpPost] // 4.4-Obtener curso buscando por campo credits (post-sincrónico)
+        public async Task<IHttpActionResult> PostByCreditAsync(RequestCredits model) // el atributo [FromBody] para indica que el valor del crédito se extrae del cuerpo de la solicitud.
+                                                                                     // Cuando es un metodo post, lo recomendable es enviar un objeto.
+                                                                                     // Si se envía un objeto no es necesario [FromBody], solo cuando se envian variables sueltas c/u debe estar precedida por [FromBody]
+        {
+            var course = await courseService.GetByCreditAsync(model.Id);             // Utilizo un metodo existente en servicios, porque de aqui en mas es lo mismo, solo cambia el controlador.
+
+            if (course == null)
+                return NotFound();
+
+            var courseDTO = mapper.Map<CourseDTO>(course);
+
+            return Ok(courseDTO);
+        }
+
+        [HttpPost] // 3.4-Obtener curso buscando por campo credits (post-asincrónico)
+        public IHttpActionResult PostByCredit([FromBody] RequestCredits model)
+        {
+            var course = courseService.GetByCredit(model.Id);                        // Utilizo un metodo existente en servicios, porque de aqui en mas es lo mismo, solo cambia el controlador.
+
+            if (course == null)
+                return NotFound();
+
+            var courseDTO = mapper.Map<CourseDTO>(course);
+
+            return Ok(courseDTO);
+        }
+
+        [HttpPost]
         public async Task<IHttpActionResult> Post(CourseDTO courseDTO) // Si el método comienza con el verbo http no es necesario colocar el decorador. No resuelve por el nombre del metodo sino por el tipo de método. Tampoco importa el nombre el método, no entiendo como matchea.
         {
             if (!ModelState.IsValid) // Valida modelo de datos.
@@ -85,7 +113,7 @@ namespace University.API.Controllers
 
             try
             {
-                var course = mapper.Map<Course>(courseDTO); //Comno el servicio debe recibir un modelo, con Mapper se envía courseDTO para recibir el modelo Course
+                var course = mapper.Map<Course>(courseDTO); //Como el servicio debe recibir un modelo, con Mapper se envía courseDTO para recibir el modelo Course
                 course = await courseService.Insert(course); //aunque la tabla curso no tiene id auto incremental, si lo fuera, por eso se guarda en una variable lo que devuelve el metodo Insert.
                 return Ok(course); // Retorna 200 ok + el objeto que se ha insertado.
             }
@@ -94,28 +122,6 @@ namespace University.API.Controllers
                 return InternalServerError(ex);
             }
         }
-
-
-        //[HttpPost]
-        //public async Task<IHttpActionResult> GetByCredits(CourseDTO courseDTO) // Si el método comienza con el verbo http no es necesario colocar el decorador. No resuelve por el nombre del metodo sino por el tipo de método. Tampoco importa el nombre el método, no entiendo como matchea.
-        //{
-        //    if (!ModelState.IsValid) // Valida modelo de datos.
-        //        return BadRequest(ModelState);
-
-        //    try
-        //    {
-        //        var course = mapper.Map<Course>(courseDTO); //Comno el servicio debe recibir un modelo, con Mapper se envía courseDTO para recibir el modelo Course
-        //        course = await courseService.Insert(course); //aunque la tabla curso no tiene id auto incremental, si lo fuera, por eso se guarda en una variable lo que devuelve el metodo Insert.
-        //        return Ok(course); // Retorna 200 ok + el objeto que se ha insertado.
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return InternalServerError(ex);
-        //    }
-        //}
-
-
-        //PostByCredits
 
         [HttpPut]
         public async Task<IHttpActionResult> Put(CourseDTO courseDTO, int id) // Recibe un objeto en el cuerpo de la peticion + un parámetro por la url.
@@ -164,7 +170,7 @@ namespace University.API.Controllers
                 return InternalServerError(ex);
             }
 
-        }
+            }
 
     }
 }

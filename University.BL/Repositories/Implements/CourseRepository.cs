@@ -39,5 +39,11 @@ namespace University.BL.Repositories.Implements
             return aux;
         }
 
+        //public async Task<Course> PostByCreditAsync(int credit)
+        //{
+        //    var aux = await universityContext.Courses.Where(x => x.Credits == credit).FirstOrDefaultAsync(); // FindOrDefaultAsync para métodos asincrónicos.
+        //    return aux;
+        //}
+
     }
 }

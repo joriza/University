@@ -35,5 +35,18 @@ namespace University.BL.Services.Implements
             return aux;
         }
 
+        //public async Task<Course> PostByCreditAsync(int credit)
+        //{
+        //    var aux = await courseRepository.GetByCreditAsync(credit);
+        //    return aux;
+        //}
+
+        //public Course PostByCredit(int credit)
+        //{
+        //    var aux = courseRepository.GetByCredit(credit);
+        //    return aux;
+        //}
+        
+
     }
 }

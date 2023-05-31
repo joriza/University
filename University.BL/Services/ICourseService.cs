@@ -12,8 +12,9 @@ namespace University.BL.Services
     {
         Task<bool> DeleteCheckRelatedEntity(int id);
         Course GetByCredit(int id); //
-
         Task<Course> GetByCreditAsync(int id); //
+        //Task<Course> PostByCreditAsync(int id); //
+        //Course PostByCredit(int id); //
     }
 
 }
