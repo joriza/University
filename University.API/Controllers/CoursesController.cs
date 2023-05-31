@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Description;
 using University.API.Models;
 using University.BL.Data;
 using University.BL.DTOs;
@@ -16,6 +17,7 @@ using University.BL.Services.Implements;
 
 namespace University.API.Controllers
 {
+    //[RoutePrefix("api/Courses")]
     public class CoursesController : ApiController
     {
         private readonly IMapper mapper;
@@ -29,7 +31,13 @@ namespace University.API.Controllers
             this.mapper = WebApiApplication.MapperConfiguration.CreateMapper();
         }
  
+        /// <summary>
+        /// Obtiene los objetos de cursos
+        /// </summary>
+        /// <returns>Listado de los objetos de cursos</returns>
+        /// <response code="200">Ok. Devuelve el listado de objetos solicitados. </response>
         [HttpGet]
+        [ResponseType(typeof(IEnumerable<CourseDTO>))]
         public async Task<IHttpActionResult> GetAll()
         {
             var courses = await courseService.GetAll();
@@ -38,7 +46,16 @@ namespace University.API.Controllers
             return Ok(coursesDTO);
         }
 
+        /// <summary>
+        /// Devuelve un objeto Course por su Id.
+        /// </summary>
+        /// <remarks> Una descripción mas larga si fuera necesario.</remarks>
+        /// <param name="id">Id del objeto solicitado</param>
+        /// <returns>Objeto Course</returns>
+        /// <response code="200">Ok. Devuelve el objeto solicitado. </response>
+        /// <response code="404">NotFound. No se encontró el objeto solicitado. </response>
         [HttpGet] // Obtener curso buscando por campo ID
+        [ResponseType(typeof(CourseDTO))]
         public async Task<IHttpActionResult> GetById(int id)
         {
             var course = await courseService.GetById(id);
@@ -162,7 +179,8 @@ namespace University.API.Controllers
                     await courseService.Delete(id);
                 else
                     throw new Exception("El id existe en tablas relacionadas, primero debe eliminarlo de ellas.");
-                return Ok();
+                string aux = "Se ha eliminado registro id = " + id.ToString();
+                return Ok(aux);
             }
             catch (Exception ex)
             {
@@ -170,7 +188,7 @@ namespace University.API.Controllers
                 return InternalServerError(ex);
             }
 
-            }
+        }
 
     }
 }
